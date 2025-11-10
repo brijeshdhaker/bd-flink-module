@@ -1,7 +1,7 @@
 package org.examples.flink;
 
-import org.examples.flink.config.WorkflowConfig;
-import org.examples.flink.utils.Constants;
+import java.util.Map;
+
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RestOptions;
@@ -10,8 +10,8 @@ import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 import org.apache.flink.streaming.api.CheckpointingMode;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-
-import java.util.Map;
+import org.examples.flink.config.WorkflowConfig;
+import org.examples.flink.utils.Constants;
 
 public class Workflow {
 
@@ -38,7 +38,7 @@ public class Workflow {
             String engine_type = workflowConf.get(Constants.ENGINE_TYPE);
 
             Configuration flinkConfig = workflowConfig.flinkConf();
-            flinkConfig.set(RestOptions.PORT, 8081);
+            flinkConfig.set(RestOptions.PORT, 8001);
             switch (engine_type){
                 case Constants.LOCAL_CLUSTER :
                     FileSystem.initialize(flinkConfig);
@@ -67,7 +67,7 @@ public class Workflow {
     protected MiniCluster getMiniCluster() {
 
         Configuration config = workflowConfig.flinkConf();
-        config.set(RestOptions.PORT, 8081);
+        config.set(RestOptions.PORT, 8001);
         final MiniClusterConfiguration cfg =
                 new MiniClusterConfiguration.Builder()
                         .setNumTaskManagers(1)

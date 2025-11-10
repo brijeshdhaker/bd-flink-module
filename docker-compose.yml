@@ -1,25 +1,25 @@
 #
-# Use root/paSSW0rd user/password credentials
+# docker compose -f docker-compose.yml up -d
+# docker compose -f docker-compose.yml down
 #
-# docker volume create --name sandbox_apps_path --opt type=none --opt device=/apps --opt o=bind
-# docker volume create --name sandbox_mysql_data --opt type=none --opt device=/apps/sandbox/mysql/data --opt o=bind
+# docker compose -f docker-compose.yml up -d minio
+# docker compose -f docker-compose.yml down minio
 #
-# docker compose -f docker-compose.yaml up -d mysqlserver
-# docker compose -f docker-compose.yaml down mysqlserver
+# docker compose -f docker-compose.yml up -d zookeeper kafka-broker schema-registry
+# docker compose -f docker-compose.yml down zookeeper kafka-broker schema-registry
 #
-# docker compose -f docker-compose.yaml up -d neetastudio.in
-# docker compose -f docker-compose.yaml down neetastudio.in
-#
-# docker exec -it mysqlserver mysql --user=root --password=paSSW0rd --host=mysqlserver.sandbox.net --database=NEETASTUDIO
-# docker exec -it mysqlserver mysql --user=neetastudio --password=paSSW0rd --host=mysqlserver.sandbox.net --database=NEETASTUDIO
-#
-# docker exec -it mysqlserver /bin/bash
-# docker exec -it neetastudio.in /bin/bash
+# docker compose -f bd-docker-sandbox/docker-compose.yml up -d flink-jobmanager flink-taskmanager
+# docker compose -f bd-docker-sandbox/docker-compose.yml down flink-jobmanager flink-taskmanager
 # 
 # docker compose up --build
 # docker compose watch
 ---
 
+#
+include:
+  - path: ./docker-minio.yml
+  - path: ./docker-kafka-cluster.yml
+  - path: ./docker-flink-cluster.yml
 
 services:
   #
