@@ -1,0 +1,89 @@
+#
+# docker volume create --name sandbox_flink_data --opt type=none --opt device=/apps/sandbox/flink/data --opt o=bind
+#
+#
+# docker compose -f docker-flink-cluster.yml up -d flink-jobmanager flink-taskmanager
+# docker compose -f docker-flink-cluster.yml down flink-jobmanager flink-taskmanager
+#
+#
+---
+# version: "3.9"
+
+#
+services:
+  #
+  # flink-jobmanager
+  #
+  flink-jobmanager:
+    image: confluentinc/cp-flink:1.20.0-cp1-java17
+    hostname: flink-jobmanager
+    container_name: flink-jobmanager
+    command: "jobmanager.sh start-foreground"
+    # depends_on:
+    #   minio:
+    #     condition: service_healthy
+    #   kafka-broker:
+    #     condition: service_healthy
+    ports:
+      - "8000:8081"
+    healthcheck:
+      test: echo $(hostname -f) || exit 1
+      retries: 20
+      interval: 10s
+    volumes:
+      - sandbox_apps_path:/apps
+      - ./conf/flink/config.yaml:/opt/flink/conf/config.yaml
+      - ${HOME}/.m2/repository/org/apache/flink/flink-s3-fs-hadoop/1.20.0/flink-s3-fs-hadoop-1.20.0.jar:/opt/flink/plugins/s3-fs-hadoop/flink-s3-fs-hadoop-1.20.0-cp1.jar
+#      - ./conf/kerberos/krb5.conf:/etc/krb5.conf
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        rest.flamegraph.enabled: true
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - JOB_MANAGER_RPC_PORT=6123
+    extra_hosts:
+      - "docker.sandbox.net:172.18.0.1"
+
+  #
+  # flink-taskmanager
+  #
+  flink-taskmanager:
+    image: confluentinc/cp-flink:1.20.0-cp1-java17
+    hostname: flink-taskmanager
+    container_name: flink-taskmanager
+    command: "taskmanager.sh start-foreground"
+    depends_on:
+      flink-jobmanager:
+        condition: service_healthy
+    healthcheck:
+      test: echo $(hostname -f) || exit 1
+      retries: 20
+      interval: 10s
+    volumes:
+      - sandbox_apps_path:/apps
+      - ./conf/flink/config.yaml:/opt/flink/conf/config.yaml
+      - ${HOME}/.m2/repository/org/apache/flink/flink-s3-fs-hadoop/1.20.0/flink-s3-fs-hadoop-1.20.0.jar:/opt/flink/plugins/s3-fs-hadoop/flink-s3-fs-hadoop-1.20.0-cp1.jar
+    environment:
+      - |
+        FLINK_PROPERTIES=
+        rest.flamegraph.enabled: true
+      - JOB_MANAGER_RPC_ADDRESS=flink-jobmanager
+      - JOB_MANAGER_RPC_PORT=6123
+    extra_hosts:
+      - "docker.sandbox.net:172.18.0.1"
+
+#
+volumes:
+  #
+  sandbox_apps_path:
+    external: true
+  #
+  sandbox_flink_data:
+    external: true
+
+#
+networks:
+  default:
+    external: true
+    driver: bridge
+    name: sandbox.net

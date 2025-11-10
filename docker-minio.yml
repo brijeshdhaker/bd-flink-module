@@ -1,0 +1,62 @@
+#
+# docker volume create --name sandbox_minio_data --opt type=none --opt device=/apps/sandbox/minio --opt o=bind
+# docker pull minio/minio:RELEASE.2024-07-29T22-14-52Z
+#
+#
+# docker compose -f bd-docker-sandbox/dc-minio.yml up -d minio
+# docker compose -f bd-docker-sandbox/dc-minio.yml down minio
+#
+---
+
+services:
+  #
+  minio:
+    image: minio/minio:RELEASE.2024-07-29T22-14-52Z
+    hostname: minio.sandbox.net
+    container_name: minio
+    healthcheck:
+      test: echo minio.sandbox.net || exit 1
+      retries: 20
+      interval: 10s
+    networks:
+      default:
+        aliases:
+          - warehouse-hadoop.minio
+          - warehouse-flink.minio
+          - warehouse-rest.minio
+          - warehouse-data.minio
+          - warehouse-demo.minio
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=password
+      - MINIO_DOMAIN=minio
+      - MINIO_ADDRESS=0.0.0.0:9010
+      - MINIO_CONSOLE_ADDRESS=0.0.0.0:9011
+      # - MINIO_ACCESS_KEY_FILE=/apps/security/keys/minio_access_key
+      # - MINIO_SECRET_KEY_FILE=/apps/security/keys/minio_secret_key
+      # - MINIO_ROOT_USER_FILE=/apps/security/keys/minio_root_user
+      # - MINIO_ROOT_PASSWORD_FILE=/apps/security/keys/minio_root_password
+    ports:
+      - "9010:9010"
+      - "9011:9011"
+    command: ["server", "/data", "--console-address", ":9011"]
+    volumes:
+      - sandbox_apps_path:/apps
+      - sandbox_minio_data:/data
+    extra_hosts:
+      - "docker.sandbox.net:172.18.0.1"
+
+#
+volumes:
+  #
+  sandbox_apps_path:
+    external: true
+  sandbox_minio_data:
+    external: true
+
+#
+networks:
+  default:
+    external: true
+    driver: bridge
+    name: sandbox.net

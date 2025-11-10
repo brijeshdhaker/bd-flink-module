@@ -1,0 +1,146 @@
+#
+# docker compose -f bd-docker-sandbox/dc-kafka-cluster-7.5.2.yaml up -d
+# docker compose -f bd-docker-sandbox/dc-kafka-cluster-7.5.2.yaml down
+#
+# docker compose -f bd-docker-sandbox/docker-compose.yml up -d zookeeper kafka-broker schema-registry
+# docker compose -f bd-docker-sandbox/docker-compose.yml down zookeeper kafka-broker schema-registry
+#
+# docker volume create --name sandbox_security_secrets --opt type=none --opt device=/apps/security/ssl --opt o=bind
+#
+# docker volume create --name sandbox_zookeeper_data --opt type=none --opt device=/apps/sandbox/zookeeper/data --opt o=bind
+# docker volume create --name sandbox_zookeeper_log --opt type=none --opt device=/apps/sandbox/zookeeper/log --opt o=bind
+#
+# docker volume create --name sandbox_kafka_data --opt type=none --opt device=/apps/sandbox/kafka/data --opt o=bind
+# docker volume create --name sandbox_kafka_log --opt type=none --opt device=/apps/sandbox/kafka/log --opt o=bind
+#
+# docker volume create --name sandbox_schema_registry_data --opt type=none --opt device=/apps/sandbox/schema-registry/data --opt o=bind
+# docker volume create --name sandbox_schema_registry_log --opt type=none --opt device=/apps/sandbox/schema-registry/log --opt o=bind
+#
+---
+
+services:
+  #
+  # Zookeeper Server
+  #
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.2
+    hostname: zookeeper.sandbox.net
+    container_name: zookeeper
+    healthcheck:
+      test: curl -f http://zookeeper.sandbox.net:8080/commands || exit 1
+      retries: 20
+      interval: 10s
+    ports:
+      - "2181:2181"
+    volumes:
+      - sandbox_apps_path:/apps
+      - sandbox_security_secrets:/etc/zookeeper/secrets
+      - sandbox_zookeeper_data:/var/lib/zookeeper/data
+      - sandbox_zookeeper_log:/var/lib/zookeeper/log
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ALLOW_UNSIGNED: "true"
+    extra_hosts:
+      - "docker.sandbox.net:172.18.0.1"
+
+  #
+  # Apache Kafka Server
+  #
+  kafka-broker:
+    image: confluentinc/cp-kafka:7.5.2
+    hostname: kafka-broker.sandbox.net
+    container_name: kafka-broker
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    healthcheck:
+      test: nc -vz kafka-broker.sandbox.net 19092 || exit 1
+      retries: 20
+      interval: 10s
+    volumes:
+      - sandbox_apps_path:/apps
+      - sandbox_security_secrets:/etc/kafka/secrets
+      - sandbox_kafka_data:/var/lib/kafka/data
+      - sandbox_kafka_log:/var/lib/kafka/log
+    environment:
+      KAFKA_BROKER_ID: "1"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper.sandbox.net:2181
+      KAFKA_ADVERTISED_HOST_NAME: docker.sandbox.net
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:19092,EXTERNAL://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka-broker.sandbox.net:19092,EXTERNAL://kafka-broker.sandbox.net:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_CONFLUENT_LICENSE_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_CONFLUENT_BALANCER_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schema-registry.sandbox.net:8081
+      KAFKA_CREATE_TOPICS: "kafka-simple-topic:1:1"
+      # HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $2}'"
+    extra_hosts:
+      - "docker.sandbox.net:172.18.0.1"
+
+  #
+  #
+  #
+  # schema-registry:
+  #   image: confluentinc/cp-schema-registry:7.5.2
+  #   hostname: schema-registry.sandbox.net
+  #   container_name: schema-registry
+  #   depends_on:
+  #     - zookeeper
+  #     - kafka-broker
+  #   healthcheck:
+  #     test: curl -f http://schema-registry.sandbox.net:8081 || exit 1
+  #     retries: 20
+  #     interval: 10s
+  #   ports:
+  #     - "8081:8081"
+  #   volumes:
+  #     - sandbox_apps_path:/apps
+  #     - sandbox_security_secrets:/etc/schema-registry/secrets
+  #     - sandbox_schema_registry_data:/var/lib/schema-registry/data
+  #     - sandbox_schema_registry_log:/var/lib/schema-registry/log
+  #   environment:
+  #     SCHEMA_REGISTRY_HOST_NAME: schema-registry
+  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: 'kafka-broker:19092'
+  #     SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+  #     SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
+  #   extra_hosts:
+  #     - "docker.sandbox.net:172.18.0.1"
+
+
+#
+volumes:
+  #
+  sandbox_apps_path:
+    external: true
+  #  
+  sandbox_security_secrets:
+    external: true
+  #
+  sandbox_zookeeper_data:
+    external: true
+  sandbox_zookeeper_log:
+    external: true
+  #
+  sandbox_kafka_data:
+    external: true
+  sandbox_kafka_log:
+    external: true
+  #
+  sandbox_schema_registry_data:
+    external: true
+  sandbox_schema_registry_log:
+    external: true
+
+#
+networks:
+  default:
+    external: true
+    driver: bridge
+    name: sandbox.net

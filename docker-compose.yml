@@ -1,0 +1,69 @@
+#
+# Use root/paSSW0rd user/password credentials
+#
+# docker volume create --name sandbox_apps_path --opt type=none --opt device=/apps --opt o=bind
+# docker volume create --name sandbox_mysql_data --opt type=none --opt device=/apps/sandbox/mysql/data --opt o=bind
+#
+# docker compose -f docker-compose.yaml up -d mysqlserver
+# docker compose -f docker-compose.yaml down mysqlserver
+#
+# docker compose -f docker-compose.yaml up -d neetastudio.in
+# docker compose -f docker-compose.yaml down neetastudio.in
+#
+# docker exec -it mysqlserver mysql --user=root --password=paSSW0rd --host=mysqlserver.sandbox.net --database=NEETASTUDIO
+# docker exec -it mysqlserver mysql --user=neetastudio --password=paSSW0rd --host=mysqlserver.sandbox.net --database=NEETASTUDIO
+#
+# docker exec -it mysqlserver /bin/bash
+# docker exec -it neetastudio.in /bin/bash
+# 
+# docker compose up --build
+# docker compose watch
+---
+
+
+services:
+  #
+  # Flink Dev Container
+  #
+  devcontainer:
+    image: mcr.microsoft.com/devcontainers/java:1-17-bookworm
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.dev
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+    volumes:
+      - .:/workspace/bd-flink-module:cached
+      - ${HOME}/.m2:/home/vscode/.m2
+      - ${HOME}/.ssh:/home/vscode/.ssh
+      - sandbox_apps_path:/apps
+    depends_on:
+      - flink-jobmanager
+    extra_hosts:
+      - docker.sandbox.net:172.18.0.1
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    #network_mode: service:mysqlserver
+    network_mode: "sandbox.net"
+    # [Optional] Required for ptrace-based debuggers like C++, Go, and Rust
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+
+#
+volumes:
+  #
+  sandbox_apps_path:
+    external: true
+
+#
+secrets:
+  mysql-root-password:
+    file: ${HOME}/IdeaProjects/neetastudio.in/conf/mysql/password.txt
+
+#
+networks:
+  default:
+    external: true
+    driver: bridge
+    name: sandbox.net

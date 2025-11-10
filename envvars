@@ -1,0 +1,22 @@
+#
+# MySql Server
+#
+APP_ENV=DEV
+APP_NAME=neetastudio.in
+DB_HOST=mysqlserver.sandbox.net
+DB_USER=neetastudio
+DB_NAME=NEETASTUDIO
+DB_PASSWORD=paSSW0rd
+DB_PASSWORD_FILE_PATH=/run/secrets/mysql-root-password
+
+#
+# PHP XDEBUG Settings
+#
+#XDEBUG_SESSION=1
+#XDEBUG_SESSION_START=vscode
+#XDEBUG_CONFIG="idekey=vscode"
+#XDEBUG_MODE=develop,debug,profiler,trace,coverage
+#XDEBUG_CLIENT_HOST=docker.sandbox.net
+#XDEBUG_CLIENT_PORT=9003
+#XDEBUG_MODE=develop,debug,coverage
+XDEBUG_TRIGGER=vscode
