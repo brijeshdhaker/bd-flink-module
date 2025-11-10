@@ -20,27 +20,27 @@ ${HOME}/foo.jar
 #### Start Flink Cluster
 ```shell
 
-docker compose -f docker-kafka-cluster.yml up -d minio
-docker compose -f docker-kafka-cluster.yml up -d zookeeper kafka-broker schema-registry
-docker compose -f docker-kafka-cluster.yml up -d flink-jobmanager flink-taskmanager
+docker compose -f docker-compose.yml up -d minio
+docker compose -f docker-compose.yml up -d zookeeper kafka-broker schema-registry
+docker compose -f docker-compose.yml up -d flink-jobmanager flink-taskmanager
 
 ## Topic - Create
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-text-topic --if-not-exists"
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-csv-topic --if-not-exists"
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-avro-topic --if-not-exists"
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-json-topic --if-not-exists"
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic fraud-alerts-topic --if-not-exists"
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-text-topic --if-not-exists"
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-csv-topic --if-not-exists"
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-avro-topic --if-not-exists"
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-json-topic --if-not-exists"
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic fraud-alerts-topic --if-not-exists"
 
 ## List Topics
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-topics --list --bootstrap-server kafka-broker.sandbox.net:9092"
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --list --bootstrap-server kafka-broker.sandbox.net:9092"
 ```
 
 #### Stop Flink Cluster
 ```shell
 
-docker compose -f docker-kafka-cluster.yml down -d flink-jobmanager flink-taskmanager
-docker compose -f docker-kafka-cluster.yml down zookeeper kafka-broker schema-registry
-docker compose -f docker-kafka-cluster.yml down minio
+docker compose -f docker-compose.yml down flink-jobmanager flink-taskmanager
+docker compose -f docker-compose.yml down zookeeper kafka-broker schema-registry
+docker compose -f docker-compose.yml down minio
 ```
 
 #
@@ -76,19 +76,19 @@ java -classpath ./bd-flink-module/target/original-bd-flink-module.jar org.exampl
 # Validate Data Generation
 ```shell
 
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-console-consumer \
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-console-consumer \
 --topic transaction-csv-topic \
 --bootstrap-server kafka-broker.sandbox.net:9092 \
 --consumer.config /apps/configs/kafka/librdkafka_plaintext.config \
 --timeout-ms 10000 2>/dev/null"  
 
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-console-consumer \
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-console-consumer \
 --topic transaction-json-topic \
 --bootstrap-server kafka-broker.sandbox.net:9092 \
 --consumer.config /apps/configs/kafka/librdkafka_plaintext.config \
 --timeout-ms 10000 2>/dev/null" 
 
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-console-consumer \
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-console-consumer \
 --topic fraud-alerts-topic \
 --bootstrap-server kafka-broker.sandbox.net:9092 \
 --consumer.config /apps/configs/kafka/librdkafka_plaintext.config \
@@ -142,7 +142,7 @@ flink stop 3ee7c8da616b3cfdea2a37916c7ac41e
 # Validate Source & Sink
 ```shell
 
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-console-consumer \
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-console-consumer \
 --topic click-event-source \
 --bootstrap-server kafka-broker.sandbox.net:9092 \
 --from-beginning \
@@ -153,7 +153,7 @@ docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-consol
 --timeout-ms 20000 2>/dev/null" 
 
 
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-console-consumer \
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-console-consumer \
 --topic click-event-source \
 --bootstrap-server kafka-broker.sandbox.net:9092 \
 --partition 0 \
@@ -167,7 +167,7 @@ docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-consol
 ```shell
 
 
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-console-consumer \
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-console-consumer \
 --topic click-event-sink \
 --bootstrap-server kafka-broker.sandbox.net:9092 \
 --from-beginning \
@@ -177,7 +177,7 @@ docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-consol
 --consumer.config /apps/configs/kafka/librdkafka_plaintext.config \
 --timeout-ms 20000 " 2>/dev/null
 
-docker compose -f docker-kafka-cluster.yml exec kafka-broker sh -c "kafka-console-consumer \
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-console-consumer \
 --topic click-event-sink \
 --bootstrap-server kafka-broker.sandbox.net:9092 \
 --offset 0 \

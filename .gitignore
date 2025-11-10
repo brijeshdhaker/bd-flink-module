@@ -21,11 +21,9 @@
 *.der
 *-creds
 *.extfile
-.ipynb_checkpoints
 */dependency-reduced-pom.xml
 build
 target
-/**/.*/
 !/.gitignore
 !/.vscode
 !/.idea
