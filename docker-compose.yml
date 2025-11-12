@@ -8,11 +8,12 @@
 # docker compose -f docker-compose.yml up -d zookeeper kafka-broker schema-registry
 # docker compose -f docker-compose.yml down zookeeper kafka-broker schema-registry
 #
-# docker compose -f bd-docker-sandbox/docker-compose.yml up -d flink-jobmanager flink-taskmanager
-# docker compose -f bd-docker-sandbox/docker-compose.yml down flink-jobmanager flink-taskmanager
+# docker compose -f docker-compose.yml up -d flink-jobmanager flink-taskmanager
+# docker compose -f docker-compose.yml down flink-jobmanager flink-taskmanager
 # 
-# docker compose up --build
+# docker compose up  --build -d
 # docker compose watch
+#
 ---
 
 #
@@ -59,7 +60,7 @@ volumes:
 #
 secrets:
   mysql-root-password:
-    file: ${HOME}/IdeaProjects/neetastudio.in/conf/mysql/password.txt
+    file: ./conf/mysql/password.txt
 
 #
 networks:

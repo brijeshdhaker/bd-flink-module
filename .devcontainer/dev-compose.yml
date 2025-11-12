@@ -51,11 +51,6 @@ volumes:
     external: true
 
 #
-secrets:
-  mysql-root-password:
-    file: ${HOME}/IdeaProjects/neetastudio.in/conf/mysql/password.txt
-
-#
 networks:
   default:
     external: true

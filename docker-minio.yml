@@ -3,8 +3,8 @@
 # docker pull minio/minio:RELEASE.2024-07-29T22-14-52Z
 #
 #
-# docker compose -f bd-docker-sandbox/dc-minio.yml up -d minio
-# docker compose -f bd-docker-sandbox/dc-minio.yml down minio
+# docker compose -f docker-compose.yml up -d minio
+# docker compose -f docker-compose.yml down minio
 #
 ---
 

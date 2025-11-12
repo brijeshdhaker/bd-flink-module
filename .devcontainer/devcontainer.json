@@ -1,17 +1,27 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the
 // README at: https://github.com/devcontainers/templates/tree/main/src/java
 {
+	//
 	"name": "bd-flink-module",
+	
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	// "image": "mcr.microsoft.com/devcontainers/java:1-17-bookworm",
 	// "dockerFile": "Dockerfile",
 	// "context": "..",
+	
+	//
 	"dockerComposeFile": [
 		"dev-compose.yml" 
 	],
+
+	//
 	"service": "devcontainer",
+	
+	//
 	"workspaceFolder": "/workspace/bd-flink-module",
-    "shutdownAction": "stopCompose",
+    
+	//
+	"shutdownAction": "stopCompose",
 
 	// Use this environment variable if you need to bind mount your local source code into a new container.
 	"remoteEnv": {
@@ -29,13 +39,13 @@
 			"enableNonRootDocker": "true",
 			"moby": "true"
 		}
-	}
+	},
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	"forwardPorts": [],
 	
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "java -version",
+	"postCreateCommand": "java -version",
 
 	// Configure tool-specific properties.
 	// "customizations": {},
