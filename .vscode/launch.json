@@ -9,7 +9,7 @@
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/${fileBasename}.log$"
         },
@@ -19,7 +19,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.clickcount.ClickEventCount",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/ClickEventCount.log"
         },
@@ -29,7 +29,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.clickcount.ClickEventGenerator",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/ClickEventGenerator.log"
         },
@@ -39,7 +39,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.delta.sink.DeltaSinkPartitionedTableExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DeltaSinkPartitionedTableExample.log"
         },
@@ -49,7 +49,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.delta.sink.DeltaTableSinkExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DeltaTableSinkExample.log"
         },
@@ -59,7 +59,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.delta.source.bounded.DeltaBoundedSourceClusterExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DeltaBoundedSourceClusterExample.log"
         },
@@ -69,7 +69,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.delta.source.bounded.DeltaBoundedSourceUserColumnsExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DeltaBoundedSourceUserColumnsExample.log"
         },
@@ -79,7 +79,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.delta.source.bounded.DeltaBoundedSourceVersionAsOfExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DeltaBoundedSourceVersionAsOfExample.log"
         },
@@ -89,7 +89,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.delta.source.continuous.DeltaContinuousSourceClusterExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DeltaContinuousSourceClusterExample.log"
         },
@@ -99,7 +99,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.delta.source.continuous.DeltaContinuousSourceStartingVersionExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DeltaContinuousSourceStartingVersionExample.log"
         },
@@ -109,7 +109,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.delta.source.continuous.DeltaContinuousSourceUserColumnsExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DeltaContinuousSourceUserColumnsExample.log"
         },
@@ -119,7 +119,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.example.DataStreamJob",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DataStreamJob.log"
         },
@@ -150,7 +150,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.spendreport.SpendReport",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/SpendReport.log"
         },
@@ -160,7 +160,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.taxi.DriverHourlyMaxTips",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/taxi_workflow.properties --engine-type local-cluster --table-name taxi-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DriverHourlyMaxTips.log"
         },
@@ -170,7 +170,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.taxi.RideCountExample",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/taxi_workflow.properties --engine-type local-cluster --table-name taxi-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/RideCountExample.log"
         },
@@ -180,7 +180,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.taxi.TaxiLongRidesAlerts",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/taxi_workflow.properties --engine-type local-cluster --table-name taxi-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/TaxiLongRidesAlerts.log"
         },
@@ -190,7 +190,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.taxi.TaxiRidesAndFares",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/taxi_workflow.properties --engine-type local-cluster --table-name taxi-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/TaxiRidesAndFares.log"
         },
@@ -200,7 +200,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.transaction.ProductsHourlySales",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/product_sales.properties --engine-type local-cluster --table-name product_sales --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/ProductsHourlySales.log"
         },
@@ -210,7 +210,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.transaction.TransactionPipeline",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/product_sales.properties --engine-type local-cluster --table-name product_sales --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/TransactionPipeline.log"
         },
@@ -220,7 +220,7 @@
             "request": "launch",
             "mainClass": "org.examples.flink.transaction.datagen.DataGenerator",
             "projectName": "bd-flink-module",
-            "args": "--app-config fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
+            "args": "--app-config ${workspaceFolder}/src/main/resources/fraud_transactions_workflow.properties --engine-type local-cluster --table-name fraud-transactions --config-path ${workspaceFolder}/src/main/resources/local-cluster",
             "envFile": "${workspaceFolder}/envvars",
             "vmArgs": "-Dlog.file=/apps/var/logs/flink/DataGenerator.log"
         }
