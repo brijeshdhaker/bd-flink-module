@@ -10,8 +10,8 @@ public class AppConfig {
 
     public static final String BOOTSTRAP_URL = "kafka-broker.sandbox.net:9092";
 
-    public static final String TRANSACTIONS_TOPIC = "transaction-json-topic";
-    public static final String ALERTS_TOPIC = "fraud-alerts-topic";
+    public static final String TRANSACTIONS_TOPIC = "transactions_json_topic";
+    public static final String ALERTS_TOPIC = "fraud_alerts_topic";
 
     public static final String CONSUMER_ID = "fn.consumer";
     public static final int TOTAL_CUSTOMERS = 1_000_000;

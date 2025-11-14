@@ -28,8 +28,12 @@ docker compose -f docker-compose.yml up -d flink-jobmanager flink-taskmanager
 docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-text-topic --if-not-exists"
 docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-csv-topic --if-not-exists"
 docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-avro-topic --if-not-exists"
-docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-json-topic --if-not-exists"
-docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic fraud-alerts-topic --if-not-exists"
+
+## Financial Transactions
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transactions_json_topic --if-not-exists"
+
+## Fraud alerts
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic fraud_alerts_topic --if-not-exists"
 
 ## List Topics
 docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --list --bootstrap-server kafka-broker.sandbox.net:9092"
