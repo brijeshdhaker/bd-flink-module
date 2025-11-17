@@ -19,11 +19,11 @@ services:
     hostname: flink-jobmanager
     container_name: flink-jobmanager
     command: "jobmanager.sh start-foreground"
-    # depends_on:
-    #   minio:
-    #     condition: service_healthy
-    #   kafka-broker:
-    #     condition: service_healthy
+    depends_on:
+      minio:
+        condition: service_healthy
+      kafka-broker:
+        condition: service_healthy
     ports:
       - "8000:8081"
     healthcheck:

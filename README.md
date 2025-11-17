@@ -25,8 +25,12 @@ docker compose -f docker-compose.yml up -d zookeeper kafka-broker schema-registr
 docker compose -f docker-compose.yml up -d flink-jobmanager flink-taskmanager
 
 ## Topic - Create
+
 docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-text-topic --if-not-exists"
+
+## Shopping Transactions
 docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-csv-topic --if-not-exists"
+
 docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --create --bootstrap-server kafka-broker.sandbox.net:9092 --partitions 3 --replication-factor 1 --topic transaction-avro-topic --if-not-exists"
 
 ## Financial Transactions
@@ -37,10 +41,13 @@ docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --cre
 
 ## List Topics
 docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --list --bootstrap-server kafka-broker.sandbox.net:9092"
+
+##
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --describe --topic fraud_alerts_topic --bootstrap-server kafka-broker.sandbox.net:9092"
 ```
 
 #### Stop Flink Cluster
-```shell
+```bash
 
 docker compose -f docker-compose.yml down flink-jobmanager flink-taskmanager
 docker compose -f docker-compose.yml down zookeeper kafka-broker schema-registry
@@ -65,13 +72,13 @@ confluentinc/cp-flink:1.20.0-cp1-java17 /bin/bash
 
 ```
 
-# Start Data Generation
+### Start Shopping Data Generation
 ```shell
 
 java -classpath target/bd-flink-module.jar:/opt/flink/lib/* org.examples.flink.transaction.datagen.DataGenerator
 ```
 
-# Start Financial Transactions Data Generation
+### Start Financial Transactions Data Generation
 ```shell
 
 java -classpath ./bd-flink-module/target/original-bd-flink-module.jar org.examples.flink.frauds.producers.TxnProducer
@@ -189,7 +196,7 @@ docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-console-cons
 --consumer.config /apps/configs/kafka/librdkafka_plaintext.config \
 --timeout-ms 20000 " 2>/dev/null
 
-kafka-topics --describe --topic click-event-sink --bootstrap-server kafka-broker.sandbox.net:9092
+docker compose -f docker-compose.yml exec kafka-broker sh -c "kafka-topics --describe --topic click-event-sink --bootstrap-server kafka-broker.sandbox.net:9092"
 
 ```
 
@@ -202,6 +209,7 @@ kafka-topics --describe --topic click-event-sink --bootstrap-server kafka-broker
 
 ### Start event count flink job
 ```shell
+
 /opt/flink/bin/flink run --detached \
 --class flink.playgrounds.delta.sink.DeltaSinkExampleLocal /opt/bd-flink-module/bd-flink-module.jar \
 --checkpointing \
@@ -210,13 +218,14 @@ kafka-topics --describe --topic click-event-sink --bootstrap-server kafka-broker
 
 ### Transaction Pipeline
 ```shell
+
 # mini-cluster
 /opt/flink/bin/flink run --detached \
 --class org.examples.flink.transaction.TransactionPipeline /opt/bd-flink-module/bd-flink-module.jar \
 --engine-type mini-cluster \
 --table-name transactions \
 --app-config transactions_workflow.properties \
---config-path ${HOME}/IdeaProjects/docker-hadoop-cluster/bd-flink-module/src/main/resources/mini-cluster
+--config-path ${HOME}/IdeaProjects/bd-flink-module/src/main/resources/mini-cluster
 
 # remote-cluster
 /opt/flink/bin/flink run --detached \
@@ -230,6 +239,7 @@ kafka-topics --describe --topic click-event-sink --bootstrap-server kafka-broker
 ```
 ###
 ```shell
+
 /opt/flink/bin/flink run --detached \
 --class flink.playgrounds.delta.sink.DeltaSinkExampleCluster /opt/bd-flink-module/bd-flink-module.jar \
 --checkpointing \
@@ -239,6 +249,7 @@ kafka-topics --describe --topic click-event-sink --bootstrap-server kafka-broker
 
 ### bounded
 ```shell
+
 flink run --detached \
 --class flink.playgrounds.delta.source.bounded.DeltaBoundedSourceClusterExample /opt/bd-flink-module/bd-flink-module.jar \
 --table-path s3a://defaultfs/delta-flink-example/
@@ -246,6 +257,7 @@ flink run --detached \
 
 ### continuous
 ```shell
+
 flink run --detached \
 --class flink.playgrounds.delta.source.continuous.DeltaContinuousSourceClusterExample /opt/bd-flink-module/bd-flink-module.jar \
 --table-path s3a://defaultfs/delta-flink-example/
@@ -253,12 +265,13 @@ flink run --detached \
 ```
 
 ```shell
+
 mvn package exec:java -Dexec.cleanupDaemonThreads=false -Dexec.mainClass=org.example.source.bounded.DeltaBoundedSourceExample -Dstaging.repo.url={maven_repo} -Dconnectors.version={version}
 mvn package exec:java -Dexec.cleanupDaemonThreads=false -Dexec.mainClass=org.example.sink.DeltaSinkExample -Dstaging.repo.url={maven_repo} -Dconnectors.version={version}
 
 
 mvn package exec:java \ 
--Dmaven.multiModuleProjectDirectory=${HOME}/IdeaProjects/docker-hadoop-cluster/bd-flink-module/ \
+-Dmaven.multiModuleProjectDirectory=${HOME}/IdeaProjects/bd-flink-module/ \
 -Dmaven.repo.local=/apps/.m2/repository \
 -DskipTests=true \
 -Dexec.cleanupDaemonThreads=false \
@@ -277,7 +290,7 @@ mvn package exec:java \
 #
 #
 #
-/usr/lib/jvm/java-1.17.0-openjdk-amd64/bin/java -Dmaven.multiModuleProjectDirectory=${HOME}/IdeaProjects/docker-hadoop-cluster/bd-flink-module -Djansi.passthrough=true -Dmaven.home=/snap/intellij-idea-community/560/plugins/maven/lib/maven3 -Dclassworlds.conf=/snap/intellij-idea-community/560/plugins/maven/lib/maven3/bin/m2.conf -Dmaven.ext.class.path=/snap/intellij-idea-community/560/plugins/maven/lib/maven-event-listener.jar -javaagent:/snap/intellij-idea-community/560/lib/idea_rt.jar=39325:/snap/intellij-idea-community/560/bin -Dfile.encoding=UTF-8 -classpath /snap/intellij-idea-community/560/plugins/maven/lib/maven3/boot/plexus-classworlds-2.8.0.jar:/snap/intellij-idea-community/560/plugins/maven/lib/maven3/boot/plexus-classworlds.license org.codehaus.classworlds.Launcher -Didea.version=2024.3.1 --update-snapshots -s ${HOME}/.m2/settings.xml -Dmaven.repo.local=/apps/.m2/repository -DskipTests=true clean package -P cluster
+/usr/lib/jvm/java-1.17.0-openjdk-amd64/bin/java -Dmaven.multiModuleProjectDirectory=${HOME}/IdeaProjects/bd-flink-module -Djansi.passthrough=true -Dmaven.home=/snap/intellij-idea-community/560/plugins/maven/lib/maven3 -Dclassworlds.conf=/snap/intellij-idea-community/560/plugins/maven/lib/maven3/bin/m2.conf -Dmaven.ext.class.path=/snap/intellij-idea-community/560/plugins/maven/lib/maven-event-listener.jar -javaagent:/snap/intellij-idea-community/560/lib/idea_rt.jar=39325:/snap/intellij-idea-community/560/bin -Dfile.encoding=UTF-8 -classpath /snap/intellij-idea-community/560/plugins/maven/lib/maven3/boot/plexus-classworlds-2.8.0.jar:/snap/intellij-idea-community/560/plugins/maven/lib/maven3/boot/plexus-classworlds.license org.codehaus.classworlds.Launcher -Didea.version=2024.3.1 --update-snapshots -s ${HOME}/.m2/settings.xml -Dmaven.repo.local=/apps/.m2/repository -DskipTests=true clean package -P cluster
 
 mvn clean install 
 ```
